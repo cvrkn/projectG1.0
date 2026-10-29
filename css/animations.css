@@ -1,0 +1,130 @@
+:root { --action-speed-multiplier: 1; }
+
+/* ===== Visemes & eyes ===== */
+.mouth > * { display: none; }
+.ch:not([data-m]) .mc, [data-m=c] .mc, [data-m=s] .ms, [data-m=A] .mA, [data-m=O] .mO, [data-m=E] .mE { display: inline; }
+.ch:not(.med) .ec { display: none; }
+.med .eo { display: none; }
+
+/* ===== Expression presets (snap instantly, no transitions) ===== */
+.wide .eo, .anx .eo { transform-box: fill-box; transform-origin: center; transform: scale(1.4); }
+.shock .eo, .manic .eo { transform-box: fill-box; transform-origin: center; transform: scale(1.55); }
+.deadpan .eo { transform-box: fill-box; transform-origin: 50% 20%; transform: scaleY(.5); }
+.shock .pp, .manic .pp, .anx .pp { transform-box: fill-box; transform-origin: center; transform: scale(.55); }
+.br { transform-box: fill-box; transform-origin: center; }
+.manic .br { transform: translateY(-5px) rotate(-5deg); }
+.wb, .flat, .sweat, .ab { display: none; }
+.anx .wb, .sad .wb, .deadpan .flat, .angry .ab { display: inline; }
+.anx .sweat { display: inline; animation: drip 1s ease-in infinite; }
+@keyframes drip { 0% { transform: translateY(-3px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translateY(16px); opacity: 0; } }
+
+/* ===== Blinking ===== */
+.bl { transform-box: fill-box; transform-origin: center; animation: blink 3.6s infinite; }
+.dv .bl { animation-duration: 2.7s; animation-delay: -.6s; }
+.dc .bl { animation-duration: 5s; animation-delay: -1s; }
+.cw .bl { animation-duration: 3.1s; animation-delay: var(--bd, 0s); }
+@keyframes blink { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.08); } }
+
+/* ===== Head motion: idle bob, talk nod, anxious tremble, manic twitch ===== */
+:is(#S1,#S2,#S3,#S4,#S5) .head-node { animation: hb 2.2s ease-in-out infinite alternate; }
+:is(#S1,#S2,#S3,#S4,#S5) .talk .head-node { animation: nod calc(.42s / var(--action-speed-multiplier)) ease-in-out infinite alternate; }
+:is(#S1,#S2,#S3,#S4,#S5) .anx .head-node, :is(#S1,#S2,#S3,#S4,#S5) .shock .head-node { animation: trem .09s linear infinite alternate; }
+:is(#S1,#S2,#S3,#S4,#S5) .manic .head-node { animation: twitch .5s steps(1) infinite; }
+:is(#S1,#S2,#S3,#S4,#S5) .deadpan .head-node { animation: dp 4s ease-in-out infinite; }
+.head-node { transition: transform .1s ease-out; }
+@keyframes hb { from { transform: rotate(-1.6deg); } to { transform: rotate(1.6deg) translateY(-1.2px); } }
+@keyframes nod { from { transform: rotate(-3deg); } to { transform: rotate(3deg) translateY(-3px); } }
+@keyframes trem { from { transform: rotate(-2.2deg) translateX(-.8px); } to { transform: rotate(2.2deg) translateX(.8px); } }
+@keyframes twitch { 0% { transform: rotate(-5deg); } 25% { transform: rotate(4deg) translateY(-2px); } 50% { transform: rotate(-2deg); } 75% { transform: rotate(6deg) translateY(-1px); } }
+@keyframes dp { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-2.5deg); } }
+
+
+/* ===== Baba jaw: rests slightly raised, small gentle opening ===== */
+.jaw { transition: transform .12s ease-in-out; transform: translateY(-2px); }
+.baba[data-m=A] .jaw { transform: translateY(5px); }
+.baba[data-m=O] .jaw { transform: translateY(3px); }
+.baba[data-m=E] .jaw { transform: translateY(2px); }
+
+
+/*old ===== Baba jaw (snappier, wider) ===== 
+.jaw { transition: transform .05s ease-out; }
+.baba[data-m=A] .jaw { transform: translateY(13px) scaleY(1.25); }
+.baba[data-m=O] .jaw { transform: translateY(10px) scaleY(1.12); }
+.baba[data-m=E] .jaw { transform: translateY(6px); }
+.baba.manic[data-m=A] .jaw { transform: translateY(17px) scaleY(1.35); }
+*/
+/* ===== Arms: idle sway + talk gestures ===== */
+.arm { transform-box: fill-box; transform-origin: 50% 0; }
+.ch:not(.talk) .arm.l { animation: sway 3.2s ease-in-out infinite alternate; }
+.ch:not(.talk) .arm.r { animation: sway 2.7s ease-in-out infinite alternate-reverse; }
+@keyframes sway { to { transform: rotate(3.5deg); } }
+.talk .arm.r { animation: g1 calc(.55s / var(--action-speed-multiplier)) ease-in-out infinite alternate; }
+.talk .arm.l { animation: g2 calc(.68s / var(--action-speed-multiplier)) ease-in-out infinite alternate; }
+.manic.talk .arm.r { animation: g1 calc(.3s / var(--action-speed-multiplier)) ease-in-out infinite alternate; }
+.manic.talk .arm.l { animation: g2 calc(.36s / var(--action-speed-multiplier)) ease-in-out infinite alternate; }
+@keyframes g1 { to { transform: rotate(-22deg); } }
+@keyframes g2 { to { transform: rotate(22deg); } }
+
+/* ===== Body: breathing, bow, levitation ===== */
+.dc, .dv:not(.bow), .baba:not(.float) { animation: breath 2.8s ease-in-out infinite; }
+@keyframes breath { 50% { transform: translateY(-1.6px); } }
+.bow { transform-box: fill-box; transform-origin: 50% 100%; animation: bw calc(1.6s / var(--action-speed-multiplier)) ease-in-out infinite; }
+@keyframes bw { 0%, 100% { transform: rotate(0) translateY(0); } 50% { transform: rotate(14deg) translateY(8px); } }
+.float { animation: fl calc(3s / var(--action-speed-multiplier)) ease-in-out infinite; }
+@keyframes fl { 50% { transform: translateY(-8px) rotate(.6deg); } }
+
+/* ===== Lighting & atmosphere ===== */
+.fl { transform-box: fill-box; transform-origin: 50% 100%; animation: fk calc(.3s / var(--action-speed-multiplier)) ease-in-out infinite alternate; }
+@keyframes fk { from { transform: scale(.9, 1) rotate(-4deg); } to { transform: scale(.8, 1.22) rotate(4deg); } }
+.gl { transform-box: fill-box; transform-origin: center; animation: glow .6s ease-in-out infinite alternate; }
+@keyframes glow { from { opacity: .55; transform: scale(.92); } to { opacity: 1; transform: scale(1.1); } }
+.sm { transform-box: fill-box; transform-origin: center; animation: sk 5s linear infinite; }
+@keyframes sk { from { transform: translateY(0) scale(.6); opacity: .5; } to { transform: translateY(-90px) scale(2); opacity: 0; } }
+.pt { animation: rs 4s linear infinite; }
+@keyframes rs { from { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } to { transform: translateY(-200px); opacity: 0; } }
+.mt { animation: mt 6s ease-in-out infinite alternate; }
+@keyframes mt { to { transform: translate(14px, -36px); } }
+.sh { animation: shaft 4.5s ease-in-out infinite alternate; }
+@keyframes shaft { from { opacity: .05; } to { opacity: .22; } }
+#sky stop:nth-child(2) { animation: dusk 8s ease-in-out infinite alternate; }
+@keyframes dusk { to { stop-color: #ff9355; } }
+.rays { transform-origin: 180px 300px; animation: spin 20s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+#aura { opacity: 0; transition: opacity 1.2s ease; transform-origin: 180px 290px; }
+#aura.on { opacity: 1; animation: pulse 1.5s ease-in-out infinite alternate; }
+@keyframes pulse { from { transform: scale(.95); } to { transform: scale(1.15); } }
+
+/* ===== Camera & impact FX (#cam > #bump wrap the whole scene) ===== */
+#cam, #bump { transform-origin: var(--fx, 180px) var(--fy, 300px); }
+#cam.run { animation: opener .55s cubic-bezier(.16,1,.3,1) both, push 7s ease-in-out .55s infinite alternate; }
+#cam.run[data-s="3"] { animation: opener .55s cubic-bezier(.16,1,.3,1) both, pan 8s ease-in-out .55s infinite alternate; }
+#cam.run[data-s="5"] { animation: pull 3.2s cubic-bezier(.2,.8,.2,1) both, push 7s ease-in-out 3.2s infinite alternate; }
+@keyframes opener { from { transform: scale(1.38); } to { transform: scale(1); } }
+@keyframes push { to { transform: scale(1.07); } }
+@keyframes pan { from { transform: translateX(-9px) scale(1.04); } to { transform: translateX(9px) scale(1.04); } }
+@keyframes pull { from { transform: scale(1.25); } to { transform: scale(1); } }
+#bump.b1 { animation: b1 .26s ease-out; }
+#bump.punch { animation: punch .42s cubic-bezier(.2,1.4,.3,1); }
+@keyframes b1 { from { transform: scale(1.03); } to { transform: scale(1); } }
+@keyframes punch { 0% { transform: scale(1.17) rotate(1.4deg); } 45% { transform: scale(1.04) rotate(-.7deg); } 100% { transform: scale(1); } }
+#flash { opacity: 0; }
+#flash.on { animation: flash .45s ease-out; }
+@keyframes flash { from { opacity: .8; } to { opacity: 0; } }
+
+/* ===== Calm / angry / sad (used by Baba and devotees) ===== */
+.calm .eo { transform-box: fill-box; transform-origin: 50% 25%; transform: scaleY(.72); }
+.angry .eo { transform-box: fill-box; transform-origin: 50% 30%; transform: scaleY(.62); }
+.sad .eo { transform-box: fill-box; transform-origin: 50% 20%; transform: scaleY(.75); }
+.baba .bl { animation-duration: 5.5s; }
+:is(#S1,#S2,#S3,#S4,#S5) .calm .head-node { animation: calmh 5s ease-in-out infinite; }
+:is(#S1,#S2,#S3,#S4,#S5) .angry .head-node { animation: rage .14s linear infinite alternate; }
+:is(#S1,#S2,#S3,#S4,#S5) .sad .head-node { animation: sadh 4s ease-in-out infinite; }
+@keyframes calmh { 0%,100% { transform: rotate(0); } 50% { transform: rotate(-1.2deg) translateY(-1px); } }
+@keyframes rage { from { transform: rotate(-1.2deg); } to { transform: rotate(1.2deg) translateY(-1.5px); } }
+@keyframes sadh { 0%,100% { transform: rotate(5deg) translateY(2px); } 50% { transform: rotate(7deg) translateY(3px); } }
+.calm.talk .arm.r { animation: g3 calc(1.7s / var(--action-speed-multiplier)) ease-in-out infinite alternate; }
+.calm.talk .arm.l { animation: g4 calc(2s / var(--action-speed-multiplier)) ease-in-out infinite alternate; }
+.angry.talk .arm.r { animation: g1 calc(.3s / var(--action-speed-multiplier)) ease-in-out infinite alternate; }
+.angry.talk .arm.l { animation: g2 calc(.36s / var(--action-speed-multiplier)) ease-in-out infinite alternate; }
+@keyframes g3 { to { transform: rotate(-9deg); } }
+@keyframes g4 { to { transform: rotate(9deg); } }
